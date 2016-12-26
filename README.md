@@ -1,6 +1,6 @@
 # streamingTV
 
-> My streamingTV app built with Electron
+An Electron app heavily inspired by Exodus.
 
 
 ## Dev
