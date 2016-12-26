@@ -1,0 +1,27 @@
+{
+  "name": "streamingTV",
+  "version": "0.1.0",
+  "description": "streamingTV",
+  "author": {
+    "name": "Rien Croonenborghs",
+    "email": "rien@croonenborghs.net"
+  },
+  "license": "MIT",
+  "main": "javascripts/index.js",
+  "dependencies": {
+    "angular": "1.5.9",
+    "angular-animate": "1.5.9",
+    "angular-route": "1.5.9",
+    "angular-aria": "1.5.9",
+    "angular-material": "1.1.1",
+    "angular-material-icons": "0.7.1",
+    "jquery": "3.1.1"
+  },
+  "settings": {
+    "width": 680,
+    "height": 750,
+    "reload": true,
+    "devTools": true,
+    "icon": ".png"
+  }
+}

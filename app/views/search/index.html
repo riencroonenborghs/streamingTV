@@ -1,0 +1,22 @@
+<md-content layout="row">
+  <md-input-container flex>
+    <input type="text" ng-model="model.query" placeholder="Search..." ng-keydown="performKeyDownSearch($event)" />
+  </md-input-container>
+  <md-button class="md-icon-button" aria-label="Search" ng-click="performSearch()">
+    <ng-md-icon icon="search" size="24"></ng-md-icon>
+  </md-button>
+</md-content>
+<md-progress-linear md-mode="indeterminate" ng-if="searching"></md-progress-linear>
+
+<md-content id="searchResults" ng-if="searchResults.length > 0">
+  <md-subheader>Search Results</md-subheader>
+
+  <md-list>
+    <md-list-item class="md-2-line" ng-repeat="item in searchResults" ng-click="visitTvShow(item.show.ids.trakt)">
+      <div class="md-list-item-text">
+        <h3>{{item.show.title}} ({{item.show.year}}) <rating stars="item.show.rating"></rating></h3>
+        <p class="overview">{{item.show.overview}}</p>
+      </div>
+    </md-list-item>
+  </md-list>
+</md-content>

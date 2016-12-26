@@ -1,0 +1,21 @@
+<md-progress-linear md-mode="indeterminate" ng-if="busy"></md-progress-linear>
+
+<navbar model="Navbar" ng-if="!busy"></navbar>
+
+<md-content ng-if="!busy" id="tvShow">
+  <h2>{{tvShow.title}} ({{tvShow.year}})</h2>
+  <p id="overview">{{tvShow.overview}}</p>
+
+  <md-list>
+    <md-list-item class="md-2-line" ng-repeat="season in seasons" ng-click="visitTvShowSeason(tvShow.ids.trakt, season.number)">
+      <div class="md-list-item-text">
+        <h3>
+          Season {{season.number}} 
+          <rating stars="season.rating"></rating>
+          <small>({{season.episode_count}} episodes)</small>
+        </h3>
+        <p class="overview">{{season.overview}}</p>
+      </div>
+    </md-list-item>
+  </md-list>
+</md-content>

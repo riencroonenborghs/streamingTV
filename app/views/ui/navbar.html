@@ -1,0 +1,9 @@
+<md-subheader class="md-primary">  
+  <span ng-repeat="item in model.list">
+    <span ng-if="item.type == 'title'">{{item.title}}</span>
+    <span ng-if="item.type == 'link'">
+      <span class="pointer" ng-click="go(item.url)">{{item.label}}</span>
+    </span>
+    <span ng-if="!$last">></span>
+  </span>
+</md-subheader>
