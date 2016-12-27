@@ -10,9 +10,22 @@ streamingTV.Crazy4TV = class Crazy4TV extends streamingTV.SourceBase
   _query: (title, season, episode) -> "#{title} #{@_SE(season, episode)}"
   _SE: (season, episode) -> "S#{@ljust(season)}E#{@ljust(episode)}"
   _quality: (s, se) ->
-    matches = s.match "#{se}\.([0-9]*p)\."
-    hdtvMatches = s.match "#{se}\.HDTV\."
+    re      = new RegExp "#{se}\.([0-9]*p)\.", "i"
+    hdtvRe  = new RegExp "#{se}\.HDTV\.", "i"
+    matches = s.match re
+    hdtvMatches = s.match hdtvRe
     (matches && matches[1]) || (hdtvMatches && "HDTV")
+
+  _parseResponse: (response, se) ->
+    sources = []    
+    dom     = $(response.data)
+    for item in dom.find("item")
+      for link in $(item).find("a[target='_blank']")          
+        if link.innerText.match "#{se}"
+          url     = link.href
+          quality = @_quality(link.innerText, se) || "unknown"
+          sources.push {url: url, quality: quality, provider: @toString()}
+    return sources
 
   getSources: (title, season, episode) ->
     se      = @_SE season, episode
@@ -20,16 +33,8 @@ streamingTV.Crazy4TV = class Crazy4TV extends streamingTV.SourceBase
     url     = "#{@base_link}#{@search_pre}#{query}#{@search_post}"
     deferred = @q.defer()
 
-    @http.get(url).then (response) =>
-      sources = []    
-      dom     = $(response.data)
-      for item in dom.find("item")
-        for link in $(item).find("a[target='_blank']")          
-          if link.innerText.match "#{se}"
-            url     = link.href
-            quality = @_quality(link.innerText, se) || "unknown"
-            sources.push {url: url, quality: quality, provider: @toString()}
-      deferred.resolve {provider: @toString(), sources: sources}
+    @http.get(url).then (response) =>      
+      deferred.resolve {provider: @toString(), sources: @_parseResponse(response, se)}
 
     deferred.promise
 

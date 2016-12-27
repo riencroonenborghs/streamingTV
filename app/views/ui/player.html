@@ -1,0 +1,31 @@
+<md-dialog aria-label="Player">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Player</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="close()">
+        <ng-md-icon icon="close" size="24" style="fill: white;"></ng-md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content>
+    <section class="video" ng-video>
+      <video vi-screen></video>
+      <section vi-controls class="controls">
+          <span vi-controls-play title="Play">
+            <ng-md-icon icon="play_arrow" size="24" style="fill: white;"></ng-md-icon>
+          </span>
+          <span vi-controls-pause title="Pause">
+            <ng-md-icon icon="pause" size="24" style="fill: white;"></ng-md-icon>
+          </span>
+      </section>
+      <section class="full-screen">
+        <span title="Full Screen" vi-full-screen-toggle>
+          <ng-md-icon icon="fullscreen" size="24" style="fill: white;"></ng-md-icon>
+        </span>
+      </section>
+    </section>
+  </md-dialog-content>
+  
+</md-dialog>

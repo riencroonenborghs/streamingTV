@@ -16,33 +16,13 @@
 </md-content>
 
 <md-content>
-  <md-progress-linear md-mode="indeterminate" ng-repeat="(provider, sourceObject) in sources" ng-if="sourceObject.busy"></md-progress-linear>  
+  <md-progress-linear md-mode="indeterminate" ng-repeat="(provider, sourceObject) in sources" ng-if="sourceObject.busy"></md-progress-linear>
 
-  <md-list ng-repeat="(provider, sourceObject) in sources" layout="column">
-    <md-list-item class="md-2-line" ng-repeat="source in sourceObject.sources" ng-click="watch(source)">
-      <div class="md-list-item-text">
-        <h4>{{provider}}</h4>
-        <p>{{source.quality}}</p>
-      </div>
-    </md-list-item>
-  </md-list>  
+  <div ng-repeat="(provider, sourceObject) in sources" ng-if="sourceObject.sources.length > 0">
+    <md-subheader>{{provider}}</md-subheader>
+    <div layout="row">
+      <md-button ng-repeat="source in sourceObject.sources" ng-click="play(source)">{{source.quality}}</md-button>
+    </div>
+  </div>
 </md-content>
 
-<div ng-if="playing">
-  <section class="video" ng-video>
-    <video vi-screen></video>
-    <section vi-controls class="controls">
-        <span vi-controls-play title="Play">
-          <ng-md-icon icon="play_arrow" size="24" style="fill: white;"></ng-md-icon>
-        </span>
-        <span vi-controls-pause title="Pause">
-          <ng-md-icon icon="pause" size="24" style="fill: white;"></ng-md-icon>
-        </span>
-    </section>
-    <section class="full-screen">
-      <span title="Full Screen" vi-full-screen-toggle>
-        <ng-md-icon icon="fullscreen" size="24" style="fill: white;"></ng-md-icon>
-      </span>
-    </section>
-  </section>
-</div>

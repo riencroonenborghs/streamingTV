@@ -6,18 +6,10 @@ app.controller "AppController", [ "$scope", "$location", "$http", "$q", ($scope,
   $scope.visitTvShowSeason = (id, season) -> $location.path "/tvShows/#{id}/seasons/#{season}"
   $scope.visitTvShowEpisode = (id, season, episode) -> $location.path "/tvShows/#{id}/seasons/#{season}/episodes/#{episode}"
 
-  # console.debug SourceBase.sources()
-
-  # a = new Crazy4TV($http, $q)
+  # a = new DDLValley($http, $q)
   # a.getSources("Silicon", 1, 1).then (sources) ->
   #   console.debug "sources"
   #   console.debug sources
-
-  # a = new Sezonlukdizi($http, $q)
-  # a.getSources().then (sources) ->
-  #   console.debug sources
-  # TraktTVAPI.searchTvShows("Burgers").then (data) ->
-    # console.debug data
 ]
 
 
@@ -71,8 +63,8 @@ app.controller "TvShowSeasonController", ["$scope", "$routeParams", "TraktTVAPI"
       $scope.busy   = false      
 ]
 
-app.controller "TvShowEpisodeController", ["$scope", "$routeParams", "TraktTVAPI", "NavbarFactory", "$http", "$q", "video",
-($scope, $routeParams, TraktTVAPI, NavbarFactory, $http, $q, video) ->
+app.controller "TvShowEpisodeController", ["$scope", "$routeParams", "TraktTVAPI", "NavbarFactory", "$http", "$q", "$mdDialog",
+($scope, $routeParams, TraktTVAPI, NavbarFactory, $http, $q, $mdDialog) ->
   tvShowId              = $routeParams.id
   $scope.seasonNumber   = $routeParams.season
   $scope.episodeNumber  = $routeParams.episode
@@ -83,13 +75,13 @@ app.controller "TvShowEpisodeController", ["$scope", "$routeParams", "TraktTVAPI
   TraktTVAPI.tvShow(tvShowId).then (data) ->
     $scope.tvShow = data    
     TraktTVAPI.tvShowEpisode(tvShowId, $scope.seasonNumber, $scope.episodeNumber).then (data) ->
-      $scope.episode = data
-      $scope.Navbar = new NavbarFactory
+      $scope.busy     = false
+      $scope.episode  = data
+      $scope.Navbar   = new NavbarFactory
       $scope.Navbar.addTitle "TV Shows"
       $scope.Navbar.addLink "/tvShows/#{$scope.tvShow.ids.trakt}", $scope.tvShow.title
       $scope.Navbar.addLink "/tvShows/#{$scope.tvShow.ids.trakt}/seasons/#{$scope.seasonNumber}", "Season #{$scope.seasonNumber}"
       $scope.Navbar.addTitle "Episode #{$scope.episodeNumber}: #{$scope.episode.title}"
-      $scope.busy   = false      
 
       $scope.sources = {}
       for sourceClass in SourceBase.getSources()
@@ -99,12 +91,20 @@ app.controller "TvShowEpisodeController", ["$scope", "$routeParams", "TraktTVAPI
           $scope.sources[sources.provider].busy = false 
           $scope.sources[sources.provider].sources = sources.sources
 
-      $scope.playing = false
-      $scope.watch = (source) ->
-        $scope.playing = true
-        source.url = "http:#{source.url}" unless source.url.match("http")
-        video.addSource("mp4", source.url)
+      $scope.play = (source) ->
+        $mdDialog.show
+          controller: "PlayController"
+          templateUrl: "ui/player.html"
+          clickOutsideToClose: false
+          locals:
+            source: source
+]
 
+app.controller "PlayController", [ "$scope", "source", "video", "$mdDialog", ($scope, source, video, $mdDialog) ->
+  source.url = "http:#{source.url}" unless source.url.match("http")
+  video.addSource "mp4", source.url
+
+  $scope.close = -> $mdDialog.hide()
 ]
 
 
