@@ -100,9 +100,18 @@ app.controller "TvShowEpisodeController", ["$scope", "$routeParams", "TraktTVAPI
             source: source
 ]
 
-app.controller "PlayController", [ "$scope", "source", "video", "$mdDialog", ($scope, source, video, $mdDialog) ->
+app.controller "PlayController", [ "$scope", "source", "$mdDialog", "$sce", ($scope, source, $mdDialog, $sce) ->
   source.url = "http:#{source.url}" unless source.url.match("http")
-  video.addSource "mp4", source.url
+  
+  console.debug source.url
+  
+  $scope.config =
+    sources: [
+      {src: $sce.trustAsResourceUrl(source.url), type: "video/mp4"}
+    ]
+    theme: "../node_modules/videogular-themes-default/videogular.css"
+    plugins:
+      poster: "http://www.videogular.com/assets/images/videogular.png"
 
   $scope.close = -> $mdDialog.hide()
 ]
