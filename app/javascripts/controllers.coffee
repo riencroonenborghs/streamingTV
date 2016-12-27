@@ -92,13 +92,13 @@ app.controller "TvShowEpisodeController", ["$scope", "$routeParams", "TraktTVAPI
       $scope.busy   = false      
 
       $scope.sources = {}
-      for sourceClass in SourceBase.getSources()        
+      for sourceClass in SourceBase.getSources()
         object = new sourceClass $http, $q
         $scope.sources[object.toString()] = {busy: true, sources: []}
         object.getSources($scope.tvShow.title, $scope.seasonNumber, $scope.episodeNumber).then (sources) =>
           $scope.sources[sources.provider].busy = false 
           $scope.sources[sources.provider].sources = sources.sources
-      
+
       $scope.playing = false
       $scope.watch = (source) ->
         $scope.playing = true

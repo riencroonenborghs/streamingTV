@@ -5,4 +5,4 @@ streamingTV.SourceBase = class SourceBase
     s = new String(s)
     if s.length < n then (padding.repeat(n - s.length) + s) else s
   @getSources: ->
-    [Sezonlukdizi, Crazy4TV]
+    [Sezonlukdizi, Crazy4TV, DailyReleases]

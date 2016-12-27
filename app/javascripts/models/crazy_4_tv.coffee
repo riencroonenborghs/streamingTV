@@ -11,7 +11,8 @@ streamingTV.Crazy4TV = class Crazy4TV extends streamingTV.SourceBase
   _SE: (season, episode) -> "S#{@ljust(season)}E#{@ljust(episode)}"
   _quality: (s, se) ->
     matches = s.match "#{se}\.([0-9]*p)\."
-    matches[1]
+    hdtvMatches = s.match "#{se}\.HDTV\."
+    (matches && matches[1]) || (hdtvMatches && "HDTV")
 
   getSources: (title, season, episode) ->
     se      = @_SE season, episode
@@ -26,8 +27,8 @@ streamingTV.Crazy4TV = class Crazy4TV extends streamingTV.SourceBase
         for link in $(item).find("a[target='_blank']")          
           if link.innerText.match "#{se}"
             url     = link.href
-            quality = @_quality link.innerText, se
-            sources.push {url: url, quality: quality, provider: "Crazy4TV"}
+            quality = @_quality(link.innerText, se) || "unknown"
+            sources.push {url: url, quality: quality, provider: @toString()}
       deferred.resolve {provider: @toString(), sources: sources}
 
     deferred.promise

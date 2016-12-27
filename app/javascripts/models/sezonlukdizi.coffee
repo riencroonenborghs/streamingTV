@@ -19,7 +19,6 @@ streamingTV.Sezonlukdizi = class Sezonlukdizi extends streamingTV.SourceBase
         for dataMatch in response.data.match(/\{(.+?)\}/g)
           matches =  dataMatch.match(/d\:\"(.*)\",id\:\"(.*)\"(.*)u\:\"\/diziler\/(.*)\.html\"/)
           @cache[matches[1]] = matches[4]
-        console.debug @cache
         url = @_constructUrl(title, season, episode)
         if url then deferred.resolve(url) else deferred.reject(url)
 
@@ -44,7 +43,7 @@ streamingTV.Sezonlukdizi = class Sezonlukdizi extends streamingTV.SourceBase
         @http.get(iframeSrc).then (response) =>
           for videosMatch in response.data.match(/video.push\(\{(.+?)\}\)/g)
             videoMatch  = videosMatch.match(/file\:\"(.+?)\", label:\"(.+?)\"/)
-            sources.push {url: videoMatch[1], quality: videoMatch[2], provider: "Sezonlukdizi"}
+            sources.push {url: videoMatch[1], quality: videoMatch[2], provider: @toString()}
           deferred.resolve {provider: @toString(), sources: sources}
 
     @_url(title, season, episode).then _urlSuccess, _urlError
